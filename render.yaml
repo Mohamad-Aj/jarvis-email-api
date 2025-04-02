@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: jarvis-email-api
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python email_api.py"
+    envVars:
+      - key: OPENAI_API_KEY
+        value: your-openai-api-key
