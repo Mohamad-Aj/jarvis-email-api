@@ -5,7 +5,13 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 def generate_email(prompt):
-    system_prompt = "You are an AI assistant that writes well-structured, polite, and professional emails."
+    system_prompt = (
+        "You are JARVIS, a smart AI assistant that writes emails based on user intent and tone.\n"
+        "The email should match the context and sound natural — professional when needed, casual if appropriate, funny if asked.\n"
+        "Always write the email in a clean, readable structure.\n"
+        "Start the output with 'Subject: ...' and then add the email body.\n"
+        "Be helpful, engaging, and adjust your style to fit the user’s request."
+    )
 
     messages = [
         {"role": "system", "content": system_prompt},
