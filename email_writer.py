@@ -1,7 +1,31 @@
 import openai
 import os
+import threading
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
+
+# ---------------- WARM-UP (cold-start killer) ----------------
+def _warm_up():
+    """
+    One fire-and-forget request that runs as soon as the module is
+    imported.  It costs < 1¢ / month on gpt-4o-mini and chops 3-5 s
+    off the first real request.
+    """
+    try:
+        openai.chat.completions.create(
+            model="gpt-4o-mini",  # tiny, cheap, instant
+            messages=[{"role": "user", "content": "ping"}],
+            max_tokens=1,
+        )
+        print("[warm-up] OK")
+    except Exception as e:
+        # Never crash the app if Render is still pulling secrets, etc.
+        print(f"[warm-up] {e}")
+
+
+# launch the warm-up in a daemon thread immediately
+threading.Thread(target=_warm_up, daemon=True).start()
 
 
 def generate_email(prompt):

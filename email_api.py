@@ -20,5 +20,10 @@ def handle_request():
         return jsonify({"error": str(e)}), 500
 
 
+@app.get("/health")
+def health():
+    return "ok", 200
+
+
 if __name__ == "__main__":
     app.run()
